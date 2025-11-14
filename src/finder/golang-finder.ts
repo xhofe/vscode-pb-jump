@@ -6,7 +6,7 @@ import { logger } from '../utils'
 /**
  * 文件内容缓存
  */
-const fileContentCache = new Map<string, { content: string; timestamp: number }>()
+const fileContentCache = new Map<string, { content: string, timestamp: number }>()
 const CACHE_TTL = 60000 // 1分钟缓存
 
 /**
@@ -55,12 +55,12 @@ export class GolangFinder implements LanguageFinder {
       // 并行处理候选文件，但限制并发数
       // 注意：候选文件已经通过预过滤，包含方法名和 func，所以 searchInFile 中不需要再次检查
       const chunks = this.chunkArray(candidateFiles, this.MAX_CONCURRENT_FILES)
-      
+
       for (const chunk of chunks) {
         const chunkResults = await Promise.all(
           chunk.map(file => this.searchInFile(file, patterns)),
         )
-        
+
         for (const result of chunkResults) {
           locations.push(...result)
         }
@@ -106,7 +106,7 @@ export class GolangFinder implements LanguageFinder {
       // 使用快速文本搜索预过滤文件
       // 构建搜索模式：必须包含方法名，可选包含类型名
       const searchPattern = this.buildSearchPattern(methodName, inputBaseType, outputBaseType)
-      
+
       // 并行检查文件是否包含关键词
       const chunks = this.chunkArray(allGoFiles, this.MAX_CONCURRENT_FILES)
       const candidateFiles: Uri[] = []
@@ -150,7 +150,7 @@ export class GolangFinder implements LanguageFinder {
     methodName: string,
     inputBaseType?: string,
     outputBaseType?: string,
-  ): { required: string[]; optional: string[] } {
+  ): { required: string[], optional: string[] } {
     const required: string[] = [methodName, 'func']
     const optional: string[] = []
 
@@ -170,7 +170,7 @@ export class GolangFinder implements LanguageFinder {
    */
   private matchesSearchPattern(
     content: string,
-    pattern: { required: string[]; optional: string[] },
+    pattern: { required: string[], optional: string[] },
   ): boolean {
     // 检查必需关键词
     for (const keyword of pattern.required) {
@@ -192,7 +192,6 @@ export class GolangFinder implements LanguageFinder {
     const locations: Location[] = []
 
     try {
-      
       // 打开文档进行精确匹配
       const document = await workspace.openTextDocument(file)
       const text = document.getText()
@@ -237,9 +236,9 @@ export class GolangFinder implements LanguageFinder {
 
     const document = await workspace.openTextDocument(file)
     const content = document.getText()
-    
+
     fileContentCache.set(filePath, { content, timestamp: now })
-    
+
     // 限制缓存大小，避免内存泄漏
     if (fileContentCache.size > 1000) {
       const firstKey = fileContentCache.keys().next().value
