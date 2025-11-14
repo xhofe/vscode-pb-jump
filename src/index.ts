@@ -13,7 +13,7 @@ const { activate, deactivate } = defineExtension(() => {
   // 注册 Proto CodeLens 提供者
   useDisposable(
     languages.registerCodeLensProvider(
-      { language: 'proto' },
+      { pattern: '**/*.proto' },
       new ProtoCodeLensProvider(),
     ),
   )

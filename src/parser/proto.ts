@@ -1,5 +1,6 @@
 import type { TextDocument } from 'vscode'
 import { Position, Range } from 'vscode'
+import { logger } from '../utils'
 
 export interface ProtoService {
   name: string
@@ -116,6 +117,8 @@ export function parseProtoFile(document: TextDocument): ProtoService[] {
   if (currentService) {
     services.push(currentService)
   }
+
+  logger.info(`Parsed ${services.length} services from ${document.fileName}`)
 
   return services
 }

@@ -43,7 +43,9 @@
 
 <!-- configs -->
 
-- `vscode-pb-jump.defaultLanguage`: 默认的目标语言（当前仅支持 `go`）
+| Key                              | Description | Type     | Default |
+| -------------------------------- | ----------- | -------- | ------- |
+| `vscode-pb-jump.defaultLanguage` | 默认的目标语言     | `string` | `"go"`  |
 
 <!-- configs -->
 
@@ -51,8 +53,10 @@
 
 <!-- commands -->
 
-- `vscode-pb-jump.jumpToImplementation`: 跳转到实现（从 proto 跳转到 golang，通过 CodeLens 调用）
-- `vscode-pb-jump.jumpToProto`: 跳转到 proto（从 golang 跳转到 proto，通过 CodeLens 调用）
+| Command                               | Title                 |
+| ------------------------------------- | --------------------- |
+| `vscode-pb-jump.jumpToImplementation` | Proto Jump: 跳转到实现     |
+| `vscode-pb-jump.jumpToProto`          | Proto Jump: 跳转到 proto |
 
 <!-- commands -->
 

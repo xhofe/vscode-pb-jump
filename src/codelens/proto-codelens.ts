@@ -18,7 +18,6 @@ export class ProtoCodeLensProvider implements CodeLensProvider {
     _token: CancellationToken,
   ): Promise<CodeLens[]> {
     const codeLenses: CodeLens[] = []
-
     try {
       const services = parseProtoFile(document)
 
