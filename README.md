@@ -8,17 +8,26 @@
 ## 功能特性
 
 - ✅ 支持 proto2 和 proto3
-- ✅ 通过 CodeLens 在 proto 方法上方显示跳转按钮
-- ✅ 自动查找对应的 Golang 实现
-- ✅ 多个实现时显示选择列表
-- ✅ 单个实现时直接跳转
+- ✅ 双向跳转：proto ↔ golang
+- ✅ 通过 CodeLens 在方法上方显示跳转按钮
+- ✅ 自动查找对应的实现/定义
+- ✅ 多个匹配时显示选择列表
+- ✅ 单个匹配时直接跳转
 - ✅ 可扩展的语言支持接口（预留其他语言扩展）
 
 ## 使用方法
 
+### 从 Proto 跳转到 Golang 实现
+
 1. 打开一个 `.proto` 文件
 2. 在服务方法定义的上方会显示 `→ 跳转到实现` 按钮
 3. 点击按钮即可跳转到对应的 Golang 实现
+
+### 从 Golang 实现跳转到 Proto 定义
+
+1. 打开一个 `.go` 文件
+2. 在 gRPC 方法实现的上方会显示 `← 跳转到 proto` 按钮
+3. 点击按钮即可跳转到对应的 proto 方法定义
 
 ## 工作原理
 
@@ -42,7 +51,8 @@
 
 <!-- commands -->
 
-- `vscode-pb-jump.jumpToImplementation`: 跳转到实现（通过 CodeLens 调用）
+- `vscode-pb-jump.jumpToImplementation`: 跳转到实现（从 proto 跳转到 golang，通过 CodeLens 调用）
+- `vscode-pb-jump.jumpToProto`: 跳转到 proto（从 golang 跳转到 proto，通过 CodeLens 调用）
 
 <!-- commands -->
 

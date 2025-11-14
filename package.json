@@ -6,7 +6,7 @@
   "private": true,
   "packageManager": "pnpm@10.4.1",
   "description": "",
-  "author": "Anthony Fu <anthonyfu117@hotmail.com>",
+  "author": "Andy Hsu <i@nn.ci>",
   "license": "MIT",
   "funding": "https://github.com/sponsors/xhofe",
   "homepage": "https://github.com/xhofe/vscode-pb-jump#readme",
@@ -34,13 +34,19 @@
     "vscode": "^1.97.0"
   },
   "activationEvents": [
-    "onLanguage:proto"
+    "onLanguage:proto",
+    "onLanguage:go"
   ],
   "contributes": {
     "commands": [
       {
         "command": "vscode-pb-jump.jumpToImplementation",
         "title": "跳转到实现",
+        "category": "Proto Jump"
+      },
+      {
+        "command": "vscode-pb-jump.jumpToProto",
+        "title": "跳转到 proto",
         "category": "Proto Jump"
       }
     ],

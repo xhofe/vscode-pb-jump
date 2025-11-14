@@ -2,6 +2,7 @@ import type { Uri, Location } from 'vscode'
 import { window, workspace } from 'vscode'
 import { LanguageFinder } from '../finder/language-finder'
 import { GolangFinder } from '../finder/golang-finder'
+import { ProtoFinder } from '../finder/proto-finder'
 import { logger } from '../utils'
 
 /**
@@ -94,6 +95,78 @@ export async function jumpToImplementation(
   }
   catch (error) {
     logger.error(`Error jumping to implementation: ${error}`)
+    window.showErrorMessage(
+      `跳转失败: ${error instanceof Error ? error.message : String(error)}`,
+    )
+  }
+}
+
+/**
+ * Proto 查找器实例
+ */
+const protoFinder = new ProtoFinder()
+
+/**
+ * 跳转到 proto 定义（反向跳转）
+ * @param methodName 方法名称
+ * @param receiverType 接收者类型（可选）
+ * @param goFileUri Golang 文件的 URI
+ */
+export async function jumpToProto(
+  methodName: string,
+  receiverType: string | undefined,
+  goFileUri: Uri,
+): Promise<void> {
+  try {
+    const locations = await protoFinder.findProtoDefinitions(
+      methodName,
+      receiverType,
+      goFileUri,
+    )
+
+    if (locations.length === 0) {
+      window.showInformationMessage(
+        `未找到方法 ${methodName} 的 proto 定义`,
+      )
+      return
+    }
+
+    if (locations.length === 1) {
+      // 单个定义，直接跳转
+      await window.showTextDocument(locations[0].uri, {
+        selection: locations[0].range,
+        preview: false,
+      })
+    }
+    else {
+      // 多个定义，显示选择列表
+      const items = locations.map((loc, index) => {
+        const relativePath = workspace.asRelativePath(loc.uri)
+        return {
+          label: `$(file-code) ${relativePath}`,
+          description: `第 ${loc.range.start.line + 1} 行`,
+          detail: loc.uri.fsPath,
+          location: loc,
+          index,
+        }
+      })
+
+      const selected = await window.showQuickPick(items, {
+        placeHolder: `找到 ${locations.length} 个 proto 定义，请选择一个`,
+        matchOnDescription: true,
+        matchOnDetail: true,
+      })
+
+      if (selected) {
+        await window.showTextDocument(selected.location.uri, {
+          selection: selected.location.range,
+          preview: false,
+        })
+      }
+    }
+  }
+  catch (error) {
+    logger.error(`Error jumping to proto: ${error}`)
     window.showErrorMessage(
       `跳转失败: ${error instanceof Error ? error.message : String(error)}`,
     )
