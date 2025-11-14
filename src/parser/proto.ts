@@ -79,7 +79,7 @@ export function parseProtoFile(document: TextDocument): ProtoService[] {
         const outputMatch = trimmedLine.match(/returns\s*\(([^)]+)\)/)
         let inputType = inputMatch ? inputMatch[1].trim() : ''
         let outputType = outputMatch ? outputMatch[1].trim() : ''
-        
+
         // 移除 stream 关键字，提取实际的类型名
         // 例如: stream RequestType -> RequestType
         inputType = inputType.replace(/^\s*stream\s+/i, '').trim()

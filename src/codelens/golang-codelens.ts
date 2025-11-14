@@ -4,7 +4,7 @@ import type {
   Command,
   TextDocument,
 } from 'vscode'
-import { CodeLens, Range, l10n } from 'vscode'
+import { CodeLens, l10n, Range } from 'vscode'
 import { parseGolangFile } from '../parser/golang'
 import { logger } from '../utils'
 

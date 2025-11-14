@@ -28,10 +28,10 @@
   "files": [
     "LICENSE.md",
     "dist/*",
-    "res/*",
-    "package.nls.json",
+    "l10n/*",
     "package.nls.*.json",
-    "l10n/*"
+    "package.nls.json",
+    "res/*"
   ],
   "engines": {
     "vscode": "^1.97.0"
