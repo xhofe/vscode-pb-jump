@@ -34,15 +34,36 @@
     "vscode": "^1.97.0"
   },
   "activationEvents": [
-    "onStartupFinished"
+    "onLanguage:proto"
   ],
   "contributes": {
-    "commands": [],
+    "commands": [
+      {
+        "command": "vscode-pb-jump.jumpToImplementation",
+        "title": "跳转到实现",
+        "category": "Proto Jump"
+      }
+    ],
     "configuration": {
       "type": "object",
       "title": "vscode-pb-jump",
-      "properties": {}
-    }
+      "properties": {
+        "vscode-pb-jump.defaultLanguage": {
+          "type": "string",
+          "default": "go",
+          "description": "默认的目标语言",
+          "enum": ["go"],
+          "enumDescriptions": ["Golang"]
+        }
+      }
+    },
+    "languages": [
+      {
+        "id": "proto",
+        "aliases": ["Protocol Buffers", "protobuf"],
+        "extensions": [".proto"]
+      }
+    ]
   },
   "scripts": {
     "build": "tsdown src/index.ts --external vscode",
