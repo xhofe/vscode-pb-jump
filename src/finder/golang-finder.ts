@@ -117,7 +117,6 @@ export class GolangFinder implements LanguageFinder {
             try {
               // 快速检查文件内容（使用缓存）
               const content = await this.getFileContent(file)
-              
               // 检查是否包含搜索模式中的所有关键词
               if (this.matchesSearchPattern(content, searchPattern)) {
                 return file
@@ -129,14 +128,12 @@ export class GolangFinder implements LanguageFinder {
             }
           }),
         )
-
         for (const result of results) {
           if (result) {
             candidateFiles.push(result)
           }
         }
       }
-
       return candidateFiles
     }
     catch (error) {
@@ -181,16 +178,6 @@ export class GolangFinder implements LanguageFinder {
         return false
       }
     }
-
-    // 如果有可选关键词，至少匹配一个
-    if (pattern.optional.length > 0) {
-      const hasOptional = pattern.optional.some(keyword => content.includes(keyword))
-      if (!hasOptional) {
-        // 如果没有可选关键词，仍然返回 true（因为必需关键词已匹配）
-        // 这样可以确保即使没有类型信息也能找到匹配
-      }
-    }
-
     return true
   }
 
