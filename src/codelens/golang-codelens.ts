@@ -1,8 +1,8 @@
 import type {
-  CodeLensProvider,
-  TextDocument,
   CancellationToken,
+  CodeLensProvider,
   Command,
+  TextDocument,
 } from 'vscode'
 import { CodeLens, Range } from 'vscode'
 import { parseGolangFile } from '../parser/golang'
@@ -15,7 +15,7 @@ import { logger } from '../utils'
 export class GolangCodeLensProvider implements CodeLensProvider {
   async provideCodeLenses(
     document: TextDocument,
-    token: CancellationToken,
+    _token: CancellationToken,
   ): Promise<CodeLens[]> {
     const codeLenses: CodeLens[] = []
 
@@ -68,4 +68,3 @@ export class GolangCodeLensProvider implements CodeLensProvider {
     return codeLenses
   }
 }
-

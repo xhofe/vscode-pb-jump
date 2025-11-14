@@ -1,6 +1,6 @@
-import type { Uri, Location } from 'vscode'
+import type { Uri } from 'vscode'
+import type { LanguageFinder } from '../finder/language-finder'
 import { window, workspace } from 'vscode'
-import { LanguageFinder } from '../finder/language-finder'
 import { GolangFinder } from '../finder/golang-finder'
 import { ProtoFinder } from '../finder/proto-finder'
 import { logger } from '../utils'
@@ -172,4 +172,3 @@ export async function jumpToProto(
     )
   }
 }
-

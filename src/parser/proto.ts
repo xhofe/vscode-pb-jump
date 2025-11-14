@@ -137,4 +137,3 @@ export function getMethodAtPosition(
   }
   return null
 }
-

@@ -1,5 +1,5 @@
 import type { Uri } from 'vscode'
-import { workspace, Range, Location } from 'vscode'
+import { Location, workspace } from 'vscode'
 import { parseProtoFile } from '../parser/proto'
 import { logger } from '../utils'
 
@@ -12,13 +12,13 @@ export class ProtoFinder {
    * 查找方法对应的 proto 定义
    * @param methodName 方法名称
    * @param receiverType 接收者类型（可选，用于推断服务名）
-   * @param goFileUri Golang 文件的 URI
+   * @param _goFileUri Golang 文件的 URI
    * @returns proto 方法定义的位置数组
    */
   async findProtoDefinitions(
     methodName: string,
     receiverType?: string,
-    goFileUri?: Uri,
+    _goFileUri?: Uri,
   ): Promise<Location[]> {
     const locations: Location[] = []
 
@@ -31,7 +31,7 @@ export class ProtoFinder {
 
       // 尝试从接收者类型推断服务名
       // 例如：alertPilotSrvImpl -> AlertPilot (移除后缀如 SrvImpl, Server, Service 等)
-      let possibleServiceNames: string[] = []
+      const possibleServiceNames: string[] = []
       if (receiverType) {
         // 移除常见的后缀
         const cleaned = receiverType
@@ -65,7 +65,7 @@ export class ProtoFinder {
                   const serviceNameLower = service.name.toLowerCase()
                   const matches = possibleServiceNames.some(
                     name => serviceNameLower.includes(name.toLowerCase())
-                        || name.toLowerCase().includes(serviceNameLower),
+                      || name.toLowerCase().includes(serviceNameLower),
                   )
 
                   if (!matches) {
@@ -96,4 +96,3 @@ export class ProtoFinder {
     }
   }
 }
-

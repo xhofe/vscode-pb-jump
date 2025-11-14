@@ -1,9 +1,10 @@
-import { defineExtension, useDisposable, useCommand } from 'reactive-vscode'
-import { languages, Uri } from 'vscode'
-import { ProtoCodeLensProvider } from './codelens/proto-codelens'
-import { GolangCodeLensProvider } from './codelens/golang-codelens'
-import { initializeLanguageFinders, jumpToImplementation, jumpToProto, registerLanguageFinder } from './commands/jump'
+import type { Uri } from 'vscode'
 import type { LanguageFinder } from './finder/language-finder'
+import { defineExtension, useCommand, useDisposable } from 'reactive-vscode'
+import { languages } from 'vscode'
+import { GolangCodeLensProvider } from './codelens/golang-codelens'
+import { ProtoCodeLensProvider } from './codelens/proto-codelens'
+import { initializeLanguageFinders, jumpToImplementation, jumpToProto, registerLanguageFinder } from './commands/jump'
 
 const { activate, deactivate } = defineExtension(() => {
   // 初始化语言查找器

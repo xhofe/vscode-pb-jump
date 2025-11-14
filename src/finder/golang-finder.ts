@@ -1,6 +1,6 @@
 import type { Uri } from 'vscode'
-import { workspace, Range, Location } from 'vscode'
-import { LanguageFinder } from './language-finder'
+import type { LanguageFinder } from './language-finder'
+import { Location, Range, workspace } from 'vscode'
 import { logger } from '../utils'
 
 /**
@@ -13,7 +13,7 @@ export class GolangFinder implements LanguageFinder {
   async findImplementations(
     serviceName: string,
     methodName: string,
-    protoUri: Uri,
+    _protoUri: Uri,
   ): Promise<Location[]> {
     const locations: Location[] = []
 
@@ -65,9 +65,9 @@ export class GolangFinder implements LanguageFinder {
 
           for (const pattern of patterns) {
             pattern.lastIndex = 0 // 重置正则表达式
-            let match: RegExpExecArray | null
+            let match: RegExpExecArray | null = pattern.exec(text)
 
-            while ((match = pattern.exec(text)) !== null) {
+            while (match !== null) {
               const position = document.positionAt(match.index)
               const line = document.lineAt(position.line)
               const range = new Range(
@@ -78,6 +78,7 @@ export class GolangFinder implements LanguageFinder {
               )
 
               locations.push(new Location(file, range))
+              match = pattern.exec(text)
             }
           }
         }
@@ -126,4 +127,3 @@ export class GolangFinder implements LanguageFinder {
     return unique
   }
 }
-

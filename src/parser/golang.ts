@@ -1,4 +1,4 @@
-import type { TextDocument, Range } from 'vscode'
+import type { Range, TextDocument } from 'vscode'
 import { Position, Range as VSCodeRange } from 'vscode'
 
 export interface GolangMethod {
@@ -71,4 +71,3 @@ export function getMethodAtPosition(
   }
   return null
 }
-

@@ -17,11 +17,11 @@ export interface LanguageFinder {
    * @param protoUri proto 文件的 URI
    * @returns 实现位置的数组
    */
-  findImplementations(
+  findImplementations: (
     serviceName: string,
     methodName: string,
     protoUri: Uri,
-  ): Promise<Location[]>
+  ) => Promise<Location[]>
 }
 
 /**
@@ -30,9 +30,8 @@ export interface LanguageFinder {
 export interface ImplementationLocation {
   uri: Uri
   range: {
-    start: { line: number; character: number }
-    end: { line: number; character: number }
+    start: { line: number, character: number }
+    end: { line: number, character: number }
   }
   displayName: string
 }
-

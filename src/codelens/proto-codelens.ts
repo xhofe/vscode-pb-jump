@@ -1,8 +1,8 @@
 import type {
-  CodeLensProvider,
-  TextDocument,
   CancellationToken,
+  CodeLensProvider,
   Command,
+  TextDocument,
 } from 'vscode'
 import { CodeLens, Range } from 'vscode'
 import { parseProtoFile } from '../parser/proto'
@@ -15,7 +15,7 @@ import { logger } from '../utils'
 export class ProtoCodeLensProvider implements CodeLensProvider {
   async provideCodeLenses(
     document: TextDocument,
-    token: CancellationToken,
+    _token: CancellationToken,
   ): Promise<CodeLens[]> {
     const codeLenses: CodeLens[] = []
 
@@ -58,4 +58,3 @@ export class ProtoCodeLensProvider implements CodeLensProvider {
     return codeLenses
   }
 }
-
