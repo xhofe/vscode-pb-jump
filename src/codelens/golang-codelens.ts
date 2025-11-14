@@ -4,7 +4,7 @@ import type {
   Command,
   TextDocument,
 } from 'vscode'
-import { CodeLens, Range } from 'vscode'
+import { CodeLens, Range, l10n } from 'vscode'
 import { parseGolangFile } from '../parser/golang'
 import { logger } from '../utils'
 
@@ -43,14 +43,14 @@ export class GolangCodeLensProvider implements CodeLensProvider {
           )
 
           const command: Command = {
-            title: '$(arrow-left) 跳转到 proto',
+            title: `$(arrow-left) ${l10n.t('Jump to Proto')}`,
             command: 'vscode-pb-jump.jumpToProto',
             arguments: [
               method.name,
               method.receiverType,
               document.uri,
             ],
-            tooltip: `跳转到 ${method.name} 的 proto 定义`,
+            tooltip: l10n.t('Jump to {0} proto definition', method.name),
           }
 
           codeLenses.push(new CodeLens(range, command))

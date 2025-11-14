@@ -1,6 +1,6 @@
 import type { Uri } from 'vscode'
 import type { LanguageFinder } from '../finder/language-finder'
-import { window, workspace } from 'vscode'
+import { window, workspace, l10n } from 'vscode'
 import { GolangFinder } from '../finder/golang-finder'
 import { ProtoFinder } from '../finder/proto-finder'
 import { logger } from '../utils'
@@ -45,7 +45,7 @@ export async function jumpToImplementation(
     const finder = languageFinders.get(language)
     if (!finder) {
       window.showWarningMessage(
-        `不支持的语言: ${language}。当前支持的语言: ${Array.from(languageFinders.keys()).join(', ')}`,
+        l10n.t('Unsupported language: {0}. Currently supported languages: {1}', language, Array.from(languageFinders.keys()).join(', ')),
       )
       return
     }
@@ -60,7 +60,7 @@ export async function jumpToImplementation(
 
     if (locations.length === 0) {
       window.showInformationMessage(
-        `未找到 ${serviceName}.${methodName} 的 ${language} 实现`,
+        l10n.t('No {0} implementation found for {1}.{2}', language, serviceName, methodName),
       )
       return
     }
@@ -78,7 +78,7 @@ export async function jumpToImplementation(
         const relativePath = workspace.asRelativePath(loc.uri)
         return {
           label: `$(file-code) ${relativePath}`,
-          description: `第 ${loc.range.start.line + 1} 行`,
+          description: l10n.t('Line {0}', loc.range.start.line + 1),
           detail: loc.uri.fsPath,
           location: loc,
           index,
@@ -86,7 +86,7 @@ export async function jumpToImplementation(
       })
 
       const selected = await window.showQuickPick(items, {
-        placeHolder: `找到 ${locations.length} 个实现，请选择一个`,
+        placeHolder: l10n.t('Found {0} implementation(s), please select one', locations.length),
         matchOnDescription: true,
         matchOnDetail: true,
       })
@@ -102,7 +102,7 @@ export async function jumpToImplementation(
   catch (error) {
     logger.error(`Error jumping to implementation: ${error}`)
     window.showErrorMessage(
-      `跳转失败: ${error instanceof Error ? error.message : String(error)}`,
+      l10n.t('Jump failed: {0}', error instanceof Error ? error.message : String(error)),
     )
   }
 }
@@ -132,7 +132,7 @@ export async function jumpToProto(
 
     if (locations.length === 0) {
       window.showInformationMessage(
-        `未找到方法 ${methodName} 的 proto 定义`,
+        l10n.t('No proto definition found for method {0}', methodName),
       )
       return
     }
@@ -150,7 +150,7 @@ export async function jumpToProto(
         const relativePath = workspace.asRelativePath(loc.uri)
         return {
           label: `$(file-code) ${relativePath}`,
-          description: `第 ${loc.range.start.line + 1} 行`,
+          description: l10n.t('Line {0}', loc.range.start.line + 1),
           detail: loc.uri.fsPath,
           location: loc,
           index,
@@ -158,7 +158,7 @@ export async function jumpToProto(
       })
 
       const selected = await window.showQuickPick(items, {
-        placeHolder: `找到 ${locations.length} 个 proto 定义，请选择一个`,
+        placeHolder: l10n.t('Found {0} proto definition(s), please select one', locations.length),
         matchOnDescription: true,
         matchOnDetail: true,
       })
@@ -174,7 +174,7 @@ export async function jumpToProto(
   catch (error) {
     logger.error(`Error jumping to proto: ${error}`)
     window.showErrorMessage(
-      `跳转失败: ${error instanceof Error ? error.message : String(error)}`,
+      l10n.t('Jump failed: {0}', error instanceof Error ? error.message : String(error)),
     )
   }
 }

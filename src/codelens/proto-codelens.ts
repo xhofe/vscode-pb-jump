@@ -4,7 +4,7 @@ import type {
   Command,
   TextDocument,
 } from 'vscode'
-import { CodeLens, Range } from 'vscode'
+import { CodeLens, Range, l10n } from 'vscode'
 import { parseProtoFile } from '../parser/proto'
 import { logger } from '../utils'
 
@@ -32,7 +32,7 @@ export class ProtoCodeLensProvider implements CodeLensProvider {
           )
 
           const command: Command = {
-            title: '$(arrow-right) 跳转到实现',
+            title: `$(arrow-right) ${l10n.t('Jump to Implementation')}`,
             command: 'vscode-pb-jump.jumpToImplementation',
             arguments: [
               method.serviceName,
@@ -41,7 +41,7 @@ export class ProtoCodeLensProvider implements CodeLensProvider {
               method.outputType,
               document.uri,
             ],
-            tooltip: `跳转到 ${method.serviceName}.${method.name} 的实现`,
+            tooltip: l10n.t('Jump to {0}.{1} implementation', method.serviceName, method.name),
           }
 
           codeLenses.push(new CodeLens(range, command))

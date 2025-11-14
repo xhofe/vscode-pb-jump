@@ -1,0 +1,14 @@
+{
+  "Jump to {0}.{1} implementation": "跳转到 {0}.{1} 的实现",
+  "Jump to {0} proto definition": "跳转到 {0} 的 proto 定义",
+  "Unsupported language: {0}. Currently supported languages: {1}": "不支持的语言: {0}。当前支持的语言: {1}",
+  "No {0} implementation found for {1}.{2}": "未找到 {0} 实现 {1}.{2}",
+  "No proto definition found for method {0}": "未找到方法 {0} 的 proto 定义",
+  "Found {0} implementation(s), please select one": "找到 {0} 个实现，请选择一个",
+  "Found {0} proto definition(s), please select one": "找到 {0} 个 proto 定义，请选择一个",
+  "Jump failed: {0}": "跳转失败: {0}",
+  "Line {0}": "第 {0} 行",
+  "Jump to Proto": "跳转到 proto",
+  "Jump to Implementation": "跳转到实现"
+}
+

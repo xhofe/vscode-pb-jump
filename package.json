@@ -28,7 +28,10 @@
   "files": [
     "LICENSE.md",
     "dist/*",
-    "res/*"
+    "res/*",
+    "package.nls.json",
+    "package.nls.*.json",
+    "l10n/*"
   ],
   "engines": {
     "vscode": "^1.97.0"
@@ -37,17 +40,18 @@
     "onLanguage:proto",
     "onLanguage:go"
   ],
+  "l10n": "./l10n",
   "contributes": {
     "commands": [
       {
         "command": "vscode-pb-jump.jumpToImplementation",
-        "title": "跳转到实现",
-        "category": "Proto Jump"
+        "title": "%command.jumpToImplementation.title%",
+        "category": "%command.category%"
       },
       {
         "command": "vscode-pb-jump.jumpToProto",
-        "title": "跳转到 proto",
-        "category": "Proto Jump"
+        "title": "%command.jumpToProto.title%",
+        "category": "%command.category%"
       }
     ],
     "configuration": {
@@ -57,7 +61,7 @@
         "vscode-pb-jump.defaultLanguage": {
           "type": "string",
           "default": "go",
-          "description": "默认的目标语言",
+          "description": "%config.defaultLanguage.description%",
           "enum": ["go"],
           "enumDescriptions": ["Golang"]
         }

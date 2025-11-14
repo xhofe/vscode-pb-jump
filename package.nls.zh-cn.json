@@ -1,0 +1,7 @@
+{
+  "command.jumpToImplementation.title": "跳转到实现",
+  "command.jumpToProto.title": "跳转到 proto",
+  "command.category": "Proto Jump",
+  "config.defaultLanguage.description": "默认的目标语言"
+}
+

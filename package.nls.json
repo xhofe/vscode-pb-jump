@@ -1,0 +1,7 @@
+{
+  "command.jumpToImplementation.title": "Jump to Implementation",
+  "command.jumpToProto.title": "Jump to Proto",
+  "command.category": "Proto Jump",
+  "config.defaultLanguage.description": "Default target language"
+}
+
