@@ -77,8 +77,13 @@ export function parseProtoFile(document: TextDocument): ProtoService[] {
         // 提取输入和输出类型
         const inputMatch = trimmedLine.match(/\(([^)]+)\)/)
         const outputMatch = trimmedLine.match(/returns\s*\(([^)]+)\)/)
-        const inputType = inputMatch ? inputMatch[1].trim() : ''
-        const outputType = outputMatch ? outputMatch[1].trim() : ''
+        let inputType = inputMatch ? inputMatch[1].trim() : ''
+        let outputType = outputMatch ? outputMatch[1].trim() : ''
+        
+        // 移除 stream 关键字，提取实际的类型名
+        // 例如: stream RequestType -> RequestType
+        inputType = inputType.replace(/^\s*stream\s+/i, '').trim()
+        outputType = outputType.replace(/^\s*stream\s+/i, '').trim()
 
         if (currentService) {
           const methodRange = document.getWordRangeAtPosition(

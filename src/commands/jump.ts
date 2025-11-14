@@ -28,12 +28,16 @@ export function initializeLanguageFinders(): void {
  * 跳转到实现
  * @param serviceName 服务名称
  * @param methodName 方法名称
+ * @param inputType 输入类型（请求类型）
+ * @param outputType 输出类型（响应类型）
  * @param protoUri proto 文件的 URI
  * @param language 目标语言（默认为 'go'）
  */
 export async function jumpToImplementation(
   serviceName: string,
   methodName: string,
+  inputType: string,
+  outputType: string,
   protoUri: Uri,
   language: string = 'go',
 ): Promise<void> {
@@ -49,6 +53,8 @@ export async function jumpToImplementation(
     const locations = await finder.findImplementations(
       serviceName,
       methodName,
+      inputType,
+      outputType,
       protoUri,
     )
 

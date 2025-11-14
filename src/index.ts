@@ -29,8 +29,8 @@ const { activate, deactivate } = defineExtension(() => {
   // 注册跳转到实现的命令（proto -> go）
   useCommand(
     'vscode-pb-jump.jumpToImplementation',
-    async (serviceName: string, methodName: string, protoUri: Uri) => {
-      await jumpToImplementation(serviceName, methodName, protoUri)
+    async (serviceName: string, methodName: string, inputType: string, outputType: string, protoUri: Uri) => {
+      await jumpToImplementation(serviceName, methodName, inputType, outputType, protoUri)
     },
   )
 

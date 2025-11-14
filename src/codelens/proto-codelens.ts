@@ -37,6 +37,8 @@ export class ProtoCodeLensProvider implements CodeLensProvider {
             arguments: [
               method.serviceName,
               method.name,
+              method.inputType,
+              method.outputType,
               document.uri,
             ],
             tooltip: `跳转到 ${method.serviceName}.${method.name} 的实现`,

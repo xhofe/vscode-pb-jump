@@ -14,12 +14,16 @@ export interface LanguageFinder {
    * 查找方法的实现位置
    * @param serviceName 服务名称
    * @param methodName 方法名称
+   * @param inputType 输入类型（请求类型）
+   * @param outputType 输出类型（响应类型）
    * @param protoUri proto 文件的 URI
    * @returns 实现位置的数组
    */
   findImplementations: (
     serviceName: string,
     methodName: string,
+    inputType: string,
+    outputType: string,
     protoUri: Uri,
   ) => Promise<Location[]>
 }

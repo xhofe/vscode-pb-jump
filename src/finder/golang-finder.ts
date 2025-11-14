@@ -13,6 +13,8 @@ export class GolangFinder implements LanguageFinder {
   async findImplementations(
     serviceName: string,
     methodName: string,
+    inputType: string,
+    outputType: string,
     _protoUri: Uri,
   ): Promise<Location[]> {
     const locations: Location[] = []
@@ -24,39 +26,61 @@ export class GolangFinder implements LanguageFinder {
         '**/vendor/**',
       )
 
-      // 常见的 Go gRPC 实现模式：
-      // 1. func (s *ServiceServer) MethodName(...) ...
-      // 2. func (s *Service) MethodName(...) ...
-      // 3. func (e serviceImpl) MethodName(...) ... (值接收者，接收者名称和类型不固定)
-      // 4. func (e *serviceImpl) MethodName(...) ... (指针接收者，接收者名称和类型不固定)
-      // 5. func MethodName(...) ... (如果方法名足够唯一)
-      const patterns = [
-        // 标准 gRPC 服务实现模式（指针接收者，服务名匹配）
-        new RegExp(
-          `func\\s+\\([^)]*\\*\\s*${this.escapeRegex(serviceName)}[^)]*\\)\\s+${this.escapeRegex(methodName)}\\s*\\(`,
-          'g',
-        ),
-        // // 值接收者模式，接收者类型包含服务名
-        // new RegExp(
-        //   `func\\s+\\([^)]*\\s+\\w*${this.escapeRegex(serviceName)}\\w*[^)]*\\)\\s+${this.escapeRegex(methodName)}\\s*\\(`,
-        //   'g',
-        // ),
-        // // 指针接收者模式，接收者类型包含服务名
-        // new RegExp(
-        //   `func\\s+\\([^)]*\\*\\s*\\w*${this.escapeRegex(serviceName)}\\w*[^)]*\\)\\s+${this.escapeRegex(methodName)}\\s*\\(`,
-        //   'g',
-        // ),
-        // 通用的值接收者模式（任意接收者名称和类型）
-        new RegExp(
-          `func\\s+\\(\\w+\\s+\\w+\\)\\s+${this.escapeRegex(methodName)}\\s*\\(`,
-          'g',
-        ),
-        // 通用的指针接收者模式（任意接收者名称和类型）
-        new RegExp(
-          `func\\s+\\(\\w+\\s+\\*\\w+\\)\\s+${this.escapeRegex(methodName)}\\s*\\(`,
-          'g',
-        ),
-      ]
+      // 从 proto 类型名提取基础类型名（忽略包名）
+      // 例如: com.example.AnalyzeReq -> AnalyzeReq
+      const inputBaseType = this.getBaseTypeName(inputType)
+      const outputBaseType = this.getBaseTypeName(outputType)
+
+      // 转义方法名和类型名用于正则匹配
+      const escapedMethodName = this.escapeRegex(methodName)
+      const escapedInputType = inputBaseType ? this.escapeRegex(inputBaseType) : ''
+      const escapedOutputType = outputBaseType ? this.escapeRegex(outputBaseType) : ''
+
+      // 构建正则表达式模式
+      // 模式1: func (receiver) MethodName(...*任意包名.InputType...) (...*任意包名.OutputType...)
+      // 模式2: func (receiver) MethodName(...*任意包名.InputType..., ...*任意包名.OutputType...)
+      const patterns: RegExp[] = []
+
+      if (escapedInputType && escapedOutputType) {
+        // 模式1: 标准 gRPC，resp 在返回值中
+        // func (receiver) MethodName(..., *任意包名.InputType, ...) (*任意包名.OutputType, ...)
+        patterns.push(new RegExp(
+          `func\\s+\\([^)]+\\)\\s+${escapedMethodName}\\s*\\([^)]*\\*[\\w.]*\\.?${escapedInputType}[^)]*\\)\\s*\\([^)]*\\*[\\w.]*\\.?${escapedOutputType}[^)]*\\)`,
+          'gi',
+        ))
+
+        // 模式2: 自定义模式，resp 在参数中
+        // func (receiver) MethodName(..., *任意包名.InputType, ..., *任意包名.OutputType, ...)
+        patterns.push(new RegExp(
+          `func\\s+\\([^)]+\\)\\s+${escapedMethodName}\\s*\\([^)]*\\*[\\w.]*\\.?${escapedInputType}[^)]*\\*[\\w.]*\\.?${escapedOutputType}[^)]*\\)`,
+          'gi',
+        ))
+      }
+      else if (escapedInputType) {
+        // 只有输入类型
+        patterns.push(new RegExp(
+          `func\\s+\\([^)]+\\)\\s+${escapedMethodName}\\s*\\([^)]*\\*[\\w.]*\\.?${escapedInputType}[^)]*\\)`,
+          'gi',
+        ))
+      }
+      else if (escapedOutputType) {
+        // 只有输出类型
+        patterns.push(new RegExp(
+          `func\\s+\\([^)]+\\)\\s+${escapedMethodName}\\s*\\([^)]*\\)\\s*\\([^)]*\\*[\\w.]*\\.?${escapedOutputType}[^)]*\\)`,
+          'gi',
+        ))
+        patterns.push(new RegExp(
+          `func\\s+\\([^)]+\\)\\s+${escapedMethodName}\\s*\\([^)]*\\*[\\w.]*\\.?${escapedOutputType}[^)]*\\)`,
+          'gi',
+        ))
+      }
+      else {
+        // 没有类型信息，只匹配方法名
+        patterns.push(new RegExp(
+          `func\\s+\\([^)]+\\)\\s+${escapedMethodName}\\s*\\(`,
+          'gi',
+        ))
+      }
 
       for (const file of goFiles) {
         try {
@@ -100,6 +124,17 @@ export class GolangFinder implements LanguageFinder {
       logger.error(`Error finding Go implementations: ${error}`)
       return []
     }
+  }
+
+  /**
+   * 从 proto 类型名获取基础类型名（移除包名）
+   * 例如: com.example.AnalyzeReq -> AnalyzeReq
+   */
+  private getBaseTypeName(protoType: string): string {
+    if (!protoType)
+      return ''
+    // 移除可能的包名前缀（如果有），只返回最后的类型名
+    return protoType.split('.').pop() || protoType
   }
 
   /**
