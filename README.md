@@ -46,6 +46,7 @@
 | Key                              | Description                          | Type     | Default |
 | -------------------------------- | ------------------------------------ | -------- | ------- |
 | `vscode-pb-jump.defaultLanguage` | %config.defaultLanguage.description% | `string` | `"go"`  |
+| `vscode-pb-jump.ignorePaths`     | %config.ignorePaths.description%     | `array`  | `[]`    |
 
 <!-- configs -->
 

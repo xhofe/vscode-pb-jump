@@ -2,6 +2,7 @@ import type { Uri } from 'vscode'
 import type { LanguageFinder } from './language-finder'
 import { Location, Range, workspace } from 'vscode'
 import { logger } from '../utils'
+import { config } from '../config'
 
 /**
  * 文件内容缓存
@@ -91,10 +92,19 @@ export class GolangFinder implements LanguageFinder {
     outputBaseType?: string,
   ): Promise<Uri[]> {
     try {
+      // 获取配置的忽略路径列表
+      const ignorePaths = config.ignorePaths || []
+      // 合并默认的 vendor 目录和用户配置的忽略路径
+      const excludePatterns = ['**/vendor/**', ...ignorePaths]
+      // VS Code 的 glob 模式支持 {pattern1,pattern2} 语法来匹配多个模式
+      const excludePattern = excludePatterns.length > 0
+        ? `{${excludePatterns.join(',')}}`
+        : '**/vendor/**'
+
       // 先找到所有 .go 文件
       const allGoFiles = await workspace.findFiles(
         '**/*.go',
-        '**/vendor/**',
+        excludePattern,
       )
 
       if (allGoFiles.length === 0) {
@@ -139,7 +149,15 @@ export class GolangFinder implements LanguageFinder {
     catch (error) {
       logger.warn(`Error in findCandidateFiles: ${error}`)
       // 如果搜索失败，返回所有文件（降级策略）
-      return await workspace.findFiles('**/*.go', '**/vendor/**')
+      const ignorePaths = config.ignorePaths || []
+      const excludePatterns = ['**/vendor/**', ...ignorePaths]
+      const excludePattern = excludePatterns.length > 0
+        ? `{${excludePatterns.join(',')}}`
+        : '**/vendor/**'
+      return await workspace.findFiles(
+        '**/*.go',
+        excludePattern,
+      )
     }
   }
 

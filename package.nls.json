@@ -2,5 +2,6 @@
   "command.jumpToImplementation.title": "Jump to Implementation",
   "command.jumpToProto.title": "Jump to Proto",
   "command.category": "Proto Jump",
-  "config.defaultLanguage.description": "Default target language"
+  "config.defaultLanguage.description": "Default target language",
+  "config.ignorePaths.description": "List of file/folder paths to ignore when searching for implementations. Supports glob patterns (e.g., '**/vendor/**', '**/test/**')."
 }

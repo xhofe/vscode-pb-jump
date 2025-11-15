@@ -64,6 +64,14 @@
           "description": "%config.defaultLanguage.description%",
           "enum": ["go"],
           "enumDescriptions": ["Golang"]
+        },
+        "vscode-pb-jump.ignorePaths": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "default": [],
+          "description": "%config.ignorePaths.description%"
         }
       }
     },

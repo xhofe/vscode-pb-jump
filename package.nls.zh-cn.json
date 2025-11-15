@@ -2,5 +2,6 @@
   "command.jumpToImplementation.title": "跳转到实现",
   "command.jumpToProto.title": "跳转到 proto",
   "command.category": "Proto Jump",
-  "config.defaultLanguage.description": "默认的目标语言"
+  "config.defaultLanguage.description": "默认的目标语言",
+  "config.ignorePaths.description": "搜索实现时要忽略的文件/文件夹路径列表。支持 glob 模式（例如：'**/vendor/**'、'**/test/**'）。"
 }
