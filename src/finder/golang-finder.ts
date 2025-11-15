@@ -1,8 +1,8 @@
 import type { Uri } from 'vscode'
 import type { LanguageFinder } from './language-finder'
 import { Location, Range, workspace } from 'vscode'
-import { logger } from '../utils'
 import { config } from '../config'
+import { logger } from '../utils'
 
 /**
  * 文件内容缓存
