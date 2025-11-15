@@ -43,9 +43,9 @@
 
 <!-- configs -->
 
-| Key                              | Description | Type     | Default |
-| -------------------------------- | ----------- | -------- | ------- |
-| `vscode-pb-jump.defaultLanguage` | 默认的目标语言     | `string` | `"go"`  |
+| Key                              | Description                          | Type     | Default |
+| -------------------------------- | ------------------------------------ | -------- | ------- |
+| `vscode-pb-jump.defaultLanguage` | %config.defaultLanguage.description% | `string` | `"go"`  |
 
 <!-- configs -->
 
@@ -53,10 +53,10 @@
 
 <!-- commands -->
 
-| Command                               | Title                 |
-| ------------------------------------- | --------------------- |
-| `vscode-pb-jump.jumpToImplementation` | Proto Jump: 跳转到实现     |
-| `vscode-pb-jump.jumpToProto`          | Proto Jump: 跳转到 proto |
+| Command                               | Title                                                    |
+| ------------------------------------- | -------------------------------------------------------- |
+| `vscode-pb-jump.jumpToImplementation` | %command.category%: %command.jumpToImplementation.title% |
+| `vscode-pb-jump.jumpToProto`          | %command.category%: %command.jumpToProto.title%          |
 
 <!-- commands -->
 

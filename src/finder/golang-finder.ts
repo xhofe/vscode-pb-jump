@@ -262,34 +262,79 @@ export class GolangFinder implements LanguageFinder {
 
     if (escapedInputType && escapedOutputType) {
       // 模式1: 标准 gRPC，resp 在返回值中
+      // 示例: func (s *Service) MethodName(ctx context.Context, req *pb.InputType) (*pb.OutputType, error)
+      // 示例: func (s *Service) MethodName(ctx context.Context, req *InputType) (*OutputType, error)
       patterns.push(new RegExp(
         `func\\s+\\([^)]+\\)\\s+${escapedMethodName}\\s*\\([^)]*\\*[\\w.]*\\.?${escapedInputType}[^)]*\\)\\s*\\([^)]*\\*[\\w.]*\\.?${escapedOutputType}[^)]*\\)`,
         'gi',
       ))
 
       // 模式2: 自定义模式，resp 在参数中
+      // 示例: func (s *Service) MethodName(ctx context.Context, req *pb.InputType, resp *pb.OutputType) error
+      // 示例: func (s *Service) MethodName(ctx context.Context, req *InputType, resp *OutputType) error
       patterns.push(new RegExp(
         `func\\s+\\([^)]+\\)\\s+${escapedMethodName}\\s*\\([^)]*\\*[\\w.]*\\.?${escapedInputType}[^)]*\\*[\\w.]*\\.?${escapedOutputType}[^)]*\\)`,
         'gi',
       ))
+
+      // 模式3: ConnectRPC 模式，使用 connect.Request[T] 和 connect.Response[T]
+      // 示例: func (s *Service) MethodName(ctx context.Context, req *connect.Request[InputType]) (*connect.Response[OutputType], error)
+      // 示例: func (s *Service) MethodName(ctx context.Context, req *connect.Request[pb.InputType]) (*connect.Response[pb.OutputType], error)
+      // 示例: func (s *Service) MethodName(ctx context.Context, req *connectv1.Request[InputType]) (*connectv1.Response[OutputType], error)
+      // 匹配 connect.Request[Type] 或 connectv1.Request[Type]，类型名可能在括号内，可能有包前缀
+      patterns.push(new RegExp(
+        `func\\s+\\([^)]+\\)\\s+${escapedMethodName}\\s*\\([^)]*\\*connect(?:v\\d+)?\\.Request\\[[^\\]]*${escapedInputType}[^\\]]*\\][^)]*\\)\\s*\\([^)]*\\*connect(?:v\\d+)?\\.Response\\[[^\\]]*${escapedOutputType}[^\\]]*\\][^)]*\\)`,
+        'gi',
+      ))
     }
     else if (escapedInputType) {
+      // 模式4: 标准 gRPC，只有输入类型
+      // 示例: func (s *Service) MethodName(ctx context.Context, req *pb.InputType) error
+      // 示例: func (s *Service) MethodName(ctx context.Context, req *InputType) error
       patterns.push(new RegExp(
         `func\\s+\\([^)]+\\)\\s+${escapedMethodName}\\s*\\([^)]*\\*[\\w.]*\\.?${escapedInputType}[^)]*\\)`,
         'gi',
       ))
+
+      // 模式5: ConnectRPC 模式，只有输入类型
+      // 示例: func (s *Service) MethodName(ctx context.Context, req *connect.Request[InputType]) error
+      // 示例: func (s *Service) MethodName(ctx context.Context, req *connect.Request[pb.InputType]) error
+      // 示例: func (s *Service) MethodName(ctx context.Context, req *connectv1.Request[InputType]) error
+      patterns.push(new RegExp(
+        `func\\s+\\([^)]+\\)\\s+${escapedMethodName}\\s*\\([^)]*\\*connect(?:v\\d+)?\\.Request\\[[^\\]]*${escapedInputType}[^\\]]*\\][^)]*\\)`,
+        'gi',
+      ))
     }
     else if (escapedOutputType) {
+      // 模式6: 标准 gRPC，只有输出类型，resp 在返回值中
+      // 示例: func (s *Service) MethodName(ctx context.Context) (*pb.OutputType, error)
+      // 示例: func (s *Service) MethodName(ctx context.Context) (*OutputType, error)
       patterns.push(new RegExp(
         `func\\s+\\([^)]+\\)\\s+${escapedMethodName}\\s*\\([^)]*\\)\\s*\\([^)]*\\*[\\w.]*\\.?${escapedOutputType}[^)]*\\)`,
         'gi',
       ))
+
+      // 模式7: 标准 gRPC，只有输出类型，resp 在参数中
+      // 示例: func (s *Service) MethodName(ctx context.Context, resp *pb.OutputType) error
+      // 示例: func (s *Service) MethodName(ctx context.Context, resp *OutputType) error
       patterns.push(new RegExp(
         `func\\s+\\([^)]+\\)\\s+${escapedMethodName}\\s*\\([^)]*\\*[\\w.]*\\.?${escapedOutputType}[^)]*\\)`,
         'gi',
       ))
+
+      // 模式8: ConnectRPC 模式，只有输出类型
+      // 示例: func (s *Service) MethodName(ctx context.Context) (*connect.Response[OutputType], error)
+      // 示例: func (s *Service) MethodName(ctx context.Context) (*connect.Response[pb.OutputType], error)
+      // 示例: func (s *Service) MethodName(ctx context.Context) (*connectv1.Response[OutputType], error)
+      patterns.push(new RegExp(
+        `func\\s+\\([^)]+\\)\\s+${escapedMethodName}\\s*\\([^)]*\\)\\s*\\([^)]*\\*connect(?:v\\d+)?\\.Response\\[[^\\]]*${escapedOutputType}[^\\]]*\\][^)]*\\)`,
+        'gi',
+      ))
     }
     else {
+      // 模式9: 无类型信息，仅匹配方法名
+      // 示例: func (s *Service) MethodName(ctx context.Context) error
+      // 示例: func (s *Service) MethodName() error
       patterns.push(new RegExp(
         `func\\s+\\([^)]+\\)\\s+${escapedMethodName}\\s*\\(`,
         'gi',
