@@ -62,8 +62,12 @@
           "type": "string",
           "default": "go",
           "description": "%config.defaultLanguage.description%",
-          "enum": ["go"],
-          "enumDescriptions": ["Golang"]
+          "enum": [
+            "go"
+          ],
+          "enumDescriptions": [
+            "Golang"
+          ]
         },
         "vscode-pb-jump.ignorePaths": {
           "type": "array",
@@ -78,8 +82,13 @@
     "languages": [
       {
         "id": "proto",
-        "aliases": ["Protocol Buffers", "protobuf"],
-        "extensions": [".proto"]
+        "aliases": [
+          "Protocol Buffers",
+          "protobuf"
+        ],
+        "extensions": [
+          ".proto"
+        ]
       }
     ]
   },
@@ -97,22 +106,22 @@
     "ext:publish": "vsxpub --no-dependencies"
   },
   "devDependencies": {
-    "@antfu/eslint-config": "^4.2.1",
+    "@antfu/eslint-config": "^4.19.0",
     "@antfu/ni": "^23.3.1",
-    "@types/node": "^22.13.4",
-    "@types/vscode": "^1.97.0",
-    "@vscode/vsce": "^3.2.2",
-    "bumpp": "^10.0.3",
-    "eslint": "^9.20.1",
-    "ovsx": "^0.10.5",
-    "pnpm": "^10.4.1",
-    "reactive-vscode": "^0.2.10",
-    "taze": "^19.8.1",
-    "tsdown": "^0.9.6",
-    "typescript": "^5.7.3",
-    "vite": "^6.1.0",
-    "vitest": "^3.0.5",
-    "vscode-ext-gen": "^1.0.0",
+    "@types/node": "^22.19.1",
+    "@types/vscode": "^1.106.0",
+    "@vscode/vsce": "^3.7.0",
+    "bumpp": "^10.3.1",
+    "eslint": "^9.39.1",
+    "ovsx": "^0.10.6",
+    "pnpm": "^10.22.0",
+    "reactive-vscode": "^0.2.22",
+    "taze": "^19.9.0",
+    "tsdown": "^0.9.9",
+    "typescript": "^5.9.3",
+    "vite": "^6.4.1",
+    "vitest": "^3.2.4",
+    "vscode-ext-gen": "^1.4.0",
     "vsxpub": "^0.1.2"
   }
 }
