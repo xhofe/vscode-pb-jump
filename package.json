@@ -34,7 +34,7 @@
     "res/*"
   ],
   "engines": {
-    "vscode": "^1.106.0"
+    "vscode": "^1.97.0"
   },
   "activationEvents": [
     "onLanguage:proto",
@@ -109,7 +109,7 @@
     "@antfu/eslint-config": "^4.19.0",
     "@antfu/ni": "^23.3.1",
     "@types/node": "^22.19.1",
-    "@types/vscode": "^1.106.0",
+    "@types/vscode": "^1.97.0",
     "@vscode/vsce": "^3.7.0",
     "bumpp": "^10.3.1",
     "eslint": "^9.39.1",
